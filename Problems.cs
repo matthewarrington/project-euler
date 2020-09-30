@@ -43,25 +43,13 @@ namespace project_euler
         //--------------------------------------------------
         public static (int, string) P0002()
         {
-            var result = FibSequence(1, 2, 4000000)
+            var result = Functions.Fibonacci(1, 2)
+                .TakeWhile(x => x <= 4000000)
                 .Where(x => x % 2 == 0)
                 .Sum(x => x)
                 .ToString();
 
             return (2, result);
-        }
-
-        private static IEnumerable<int> FibSequence(int a, int b, int max)
-        {
-            yield return a;
-            yield return b;
-
-            (a, b) = (b, a + b);
-            while (b < max)
-            {
-                yield return b;
-                (a, b) = (b, a + b);
-            }
         }
 
         //--------------------------------------------------
@@ -84,7 +72,7 @@ namespace project_euler
         {
             var target = 600851475143;
 
-            foreach(var p in Primes().Take(1000))
+            foreach(var p in Functions.Primes().Take(1000))
             {
                 while (target % p == 0)
                 {
@@ -97,35 +85,6 @@ namespace project_euler
             }
 
             throw new Exception("Ran out of primes without resolution.");
-        }
-
-        private static IEnumerable<int> Primes()
-        {
-            var primes = new List<int>() { 2 };
-            var i = 3;
-
-            yield return 2;
-
-            while(true)
-            {
-                var isPrime = true;
-                foreach(var p in primes)
-                {
-                    if (i % p == 0)
-                    {
-                        isPrime = false;
-                        continue;
-                    }
-                }
-
-                if (isPrime)
-                {
-                    primes.Add(i);
-                    yield return i;
-                }
-
-                i += 2;
-            }
         }
     }
 }
