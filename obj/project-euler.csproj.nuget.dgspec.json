@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\matt\\files\\repos\\project-euler\\project-euler.csproj": {}
+    "C:\\matt\\files\\repos\\asdf\\project-euler\\project-euler.csproj": {}
   },
   "projects": {
-    "C:\\matt\\files\\repos\\project-euler\\project-euler.csproj": {
+    "C:\\matt\\files\\repos\\asdf\\project-euler\\project-euler.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\matt\\files\\repos\\project-euler\\project-euler.csproj",
+        "projectUniqueName": "C:\\matt\\files\\repos\\asdf\\project-euler\\project-euler.csproj",
         "projectName": "project-euler",
-        "projectPath": "C:\\matt\\files\\repos\\project-euler\\project-euler.csproj",
+        "projectPath": "C:\\matt\\files\\repos\\asdf\\project-euler\\project-euler.csproj",
         "packagesPath": "C:\\Users\\Matt\\.nuget\\packages\\",
-        "outputPath": "C:\\matt\\files\\repos\\project-euler\\obj\\",
+        "outputPath": "C:\\matt\\files\\repos\\asdf\\project-euler\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

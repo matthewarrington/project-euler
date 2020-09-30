@@ -11,3 +11,16 @@ C:\matt\files\repos\project-euler\obj\Debug\netcoreapp3.1\project-euler.csproj.C
 C:\matt\files\repos\project-euler\obj\Debug\netcoreapp3.1\project-euler.dll
 C:\matt\files\repos\project-euler\obj\Debug\netcoreapp3.1\project-euler.pdb
 C:\matt\files\repos\project-euler\obj\Debug\netcoreapp3.1\project-euler.genruntimeconfig.cache
+C:\matt\files\repos\asdf\project-euler\bin\Debug\netcoreapp3.1\project-euler.exe
+C:\matt\files\repos\asdf\project-euler\bin\Debug\netcoreapp3.1\project-euler.deps.json
+C:\matt\files\repos\asdf\project-euler\bin\Debug\netcoreapp3.1\project-euler.runtimeconfig.json
+C:\matt\files\repos\asdf\project-euler\bin\Debug\netcoreapp3.1\project-euler.runtimeconfig.dev.json
+C:\matt\files\repos\asdf\project-euler\bin\Debug\netcoreapp3.1\project-euler.dll
+C:\matt\files\repos\asdf\project-euler\bin\Debug\netcoreapp3.1\project-euler.pdb
+C:\matt\files\repos\asdf\project-euler\obj\Debug\netcoreapp3.1\project-euler.csprojAssemblyReference.cache
+C:\matt\files\repos\asdf\project-euler\obj\Debug\netcoreapp3.1\project-euler.AssemblyInfoInputs.cache
+C:\matt\files\repos\asdf\project-euler\obj\Debug\netcoreapp3.1\project-euler.AssemblyInfo.cs
+C:\matt\files\repos\asdf\project-euler\obj\Debug\netcoreapp3.1\project-euler.csproj.CoreCompileInputs.cache
+C:\matt\files\repos\asdf\project-euler\obj\Debug\netcoreapp3.1\project-euler.dll
+C:\matt\files\repos\asdf\project-euler\obj\Debug\netcoreapp3.1\project-euler.pdb
+C:\matt\files\repos\asdf\project-euler\obj\Debug\netcoreapp3.1\project-euler.genruntimeconfig.cache
