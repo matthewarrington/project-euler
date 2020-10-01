@@ -59,8 +59,7 @@ namespace project_euler
         //
         // What is the largest prime factor of the number 600851475143?
         //--------------------------------------------------
-        // Notes:
-        // Current plan:
+        // Plan:
         //  1. Find next prime (as before, use a generator because fun and
         //     convenient)
         //  2. Test if target is divisible by prime, reducing target by
@@ -85,6 +84,84 @@ namespace project_euler
             }
 
             throw new Exception("Ran out of primes without resolution.");
+        }
+
+        //--------------------------------------------------
+        // https://projecteuler.net/problem=4
+        //
+        // A palindromic number reads the same both ways. The largest palindrome
+        // made from the product of two 2-digit numbers is 9009 = 91 × 99.
+        //
+        // Find the largest palindrome made from the product of two 3-digit
+        // numbers.
+        //--------------------------------------------------
+        // Plan:
+        //  * I don't know enough about mathematics to casually know the
+        //    numeric patterns that would lead to this. I'm going to try
+        //    making it a search problem.
+        //  * "PNum" = Palindromic Number
+        //  1. Fabricate pnums, starting with the largest possible (999999)
+        //     a. Create it from a three digit number, repeated
+        //     b. Start with 999, decrement as that fails, etc
+        //  2. Make guesses for two numbers
+        //     a. Start with the sqrt of the pnum, truncated
+        //     b. Take the product of this A * B and compare it to the pnum
+        //        * If the product is too small, increment A
+        //        * If the product is too large, decrement B
+        //     c. Stop when:
+        //        * Victory: The product == pnum
+        //        * Defeat: A or B is no longer 3 digits
+        //  3. Try different pnums until we're out of 6-digit numbers
+        //--------------------------------------------------
+        public static (int, string) P0004()
+        {
+            foreach(var pNum in GeneratePalindromes())
+            {
+                var a = (int)Math.Sqrt(pNum);
+                var b = a;
+
+                while (a <= 999 && b >= 100)
+                {
+                    var product = a * b;
+
+                    if (product == pNum)
+                    {
+                        return (4, product.ToString());
+                    }
+                    else if (product < pNum)
+                    {
+                        a++;
+                    }
+                    else
+                    {
+                        b--;
+                    }
+                }
+            }
+
+            throw new Exception("Ran out of palindromes without resolution.");
+        }
+
+        private static int ReverseInt(int i)
+        {
+            var result = 0;
+            while(i > 0)
+            {
+                result = result * 10 + i % 10;
+                i /= 10;
+            }
+            return result;
+        }
+
+        private static IEnumerable<int> GeneratePalindromes()
+        {
+            var seed = 999;
+
+            while (seed >= 100)
+            {
+                yield return seed * 1000 + ReverseInt(seed);
+                seed--;
+            }
         }
     }
 }
