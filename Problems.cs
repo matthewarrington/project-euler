@@ -142,25 +142,56 @@ namespace project_euler
             throw new Exception("Ran out of palindromes without resolution.");
         }
 
-        private static int ReverseInt(int i)
-        {
-            var result = 0;
-            while(i > 0)
-            {
-                result = result * 10 + i % 10;
-                i /= 10;
-            }
-            return result;
-        }
-
         private static IEnumerable<int> GeneratePalindromes()
         {
             var seed = 999;
 
             while (seed >= 100)
             {
-                yield return seed * 1000 + ReverseInt(seed);
+                yield return seed * 1000 + Functions.ReverseInt(seed);
                 seed--;
+            }
+        }
+
+        //--------------------------------------------------
+        // https://projecteuler.net/problem=5
+        //
+        // 2520 is the smallest number that can be divided by each of the numbers
+        // from 1 to 10 without any remainder.
+        //
+        // What is the smallest positive number that is evenly divisible by all
+        // of the numbers from 1 to 20?
+        //--------------------------------------------------
+        // Plan:
+        //  * Find the set of factors for each input. Make a new set of factors,
+        //    composed of the highest count of each factor among the set. Result
+        //    is the product of the new set of factors.
+        //    TODO: Come up with a better explanation. Factor factor factor.
+        //--------------------------------------------------
+        public static (int, string) P0005()
+        {
+            // "factors" is x[factor] = counts;
+            var factors = new Dictionary<int, int>();
+            for(int i = 20; i > 1; i--)
+            {
+                factors.MergeFactors(Functions.Factor(i));
+            }
+
+            var result = factors.Keys
+                .Aggregate(1, (product, factor) => product * (int)Math.Pow(factor, factors[factor])
+                );
+
+            return (5, result.ToString());
+        }
+
+        private static void MergeFactors(this Dictionary<int, int> factors, Dictionary<int, int> newFactors)
+        {
+            foreach(var nk in newFactors.Keys)
+            {
+                if (!factors.ContainsKey(nk) || factors[nk] < newFactors[nk])
+                {
+                    factors[nk] = newFactors[nk];
+                }
             }
         }
     }
