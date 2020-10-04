@@ -305,5 +305,117 @@ namespace project_euler
 
             return (8, bestProduct.ToString());
         }
+        
+        //--------------------------------------------------
+        // https://projecteuler.net/problem=9
+        //
+        // A Pythagorean triplet is a set of three natural numbers, a < b < c, for
+        // which,
+        //
+        //      a^2 + b^2 = c^2
+        //
+        // For example, 3^2 + 4^2 = 9 + 16 = 25 = 5^2.
+        //
+        // There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+        // Find the product abc.
+        //--------------------------------------------------
+        // Plan:
+        //  * Some quick analysis of this problem yields a couple interesting points
+        //      * For this analysis, D = A + B + C, and E = A^2 + B^2
+        //      * Given the constraints, we're going to have a relationship between
+        //        A and B. We see a pattern with how their sum-of-squares will unfold.
+        //        Example, where A + B = 10:
+        // 
+        //          A |  B |  A^2 + B^2
+        //         ---+----+-------------
+        //          0 | 10 |  0
+        //          1 |  9 | 81
+        //          2 |  8 | 68
+        //          3 |  7 | 58
+        //          4 |  6 | 52
+        //          5 |  5 | 50
+        //
+        //        The pattern is that the closer A and B are, the smaller the sum-of-
+        //        squares will be. The pattern means we might be able to turn this
+        //        into a search problem.
+        //      * Also from the above, we see as A and B diverge, E increases dramatically.
+        //        A large single B value is increasingly more powerful than an equal
+        //        contribution of two smaller values.
+        //      * If A = B and E > C^2, no other values of A or B will work (assuming D
+        //        stays true).
+        //      * If C >= A + B, E will always be < C^2. That means it's not even worth
+        //        checking extremes like C = 900.
+        //      * Just the above points let us cut down the brute force space a lot.
+        //  * Algorithm:
+        //      * Start with close values, A ≈ B ≈ C. Maintaining A < B < C, this boils
+        //        down to B = (D / 3); A = B - 1; C = D - A - B;
+        //      * This will start with the smallest C^2 and smallest E we can possibly
+        //        have.
+        //      * Test E = C^2:
+        //          * Check problem constraints first
+        //          * If E = C^2, stop -- we succeeded
+        //          * If C > A + B, stop -- we failed
+        //          * If E < C^2, we might be able to increase it (A--, B++)
+        //          * If E > C^2, we can't get any smaller for this C (C++)
+        //      * We might be able to binary search rather than increment, but that's
+        //        more complexity than we probably need.
+        //--------------------------------------------------
+        public static (int, string) P0009()
+        {
+            const int D = 1000;
+            int A, B;
+            int C = D - (D * 2 / 3) + 1;
+            (A, B) = ResetAB(C, D);
+
+            do
+            {
+                int E = Sq(A) + Sq(B);
+                int SqC = Sq(C);
+
+                //Console.WriteLine($"{A}, {B}, {C}, {E}, {SqC}, {A*B*C}");
+                Assert((A + B + C) == D, "Violated A + B + C");
+                Assert(A < B && B < C, "Violated A < B < C");
+
+                if (E == SqC)
+                {
+                    return (9, (A*B*C).ToString());
+                }
+
+                if (E < SqC)
+                {
+                    A--;
+                    B++;
+                }
+
+                if (E > SqC || B >= C)
+                {
+                    C++;
+                    (A, B) = ResetAB(C, D);
+                }
+            }
+            while(C < A + B);
+
+            throw new Exception("Failed without resolution");
+
+            (int A, int B) ResetAB(int C, int D) {
+                var A = (D - C) / 2;
+                var B = D - C - A;
+                if (A == B) {
+                    A--;
+                    B++;
+                }
+                return (A, B);
+            }
+            int Sq(int x) {
+                return (int)Math.Pow(x, 2);
+            }
+        }
+
+        private static void Assert(bool condition, string message)
+        {
+            if (!condition) {
+                throw new Exception(message);
+            }
+        }
     }
 }
