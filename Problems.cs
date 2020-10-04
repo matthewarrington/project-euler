@@ -170,7 +170,6 @@ namespace project_euler
         //--------------------------------------------------
         public static (int, string) P0005()
         {
-            // "factors" is x[factor] = counts;
             var factors = new Dictionary<int, int>();
             for(int i = 20; i > 1; i--)
             {
@@ -235,8 +234,7 @@ namespace project_euler
         // What is the 10 001st prime number?
         //--------------------------------------------------
         // Plan:
-        //  * Reuse earlier function
-        //  * TODO: This took 3.2s... do we need something faster?
+        //  * Reuse existing function
         //--------------------------------------------------
         public static (int, string) P0007()
         {
@@ -378,7 +376,7 @@ namespace project_euler
 
                 if (E == SqC)
                 {
-                    return (9, (A*B*C).ToString());
+                    return (9, (A * B * C).ToString());
                 }
 
                 if (E < SqC)
@@ -409,6 +407,27 @@ namespace project_euler
             int Sq(int x) {
                 return (int)Math.Pow(x, 2);
             }
+        }
+
+        //--------------------------------------------------
+        // https://projecteuler.net/problem=10
+        //
+        // The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+        //
+        // Find the sum of all the primes below two million.
+        //--------------------------------------------------
+        // Plan:
+        //  * Use the existing function
+        //      * This took 13m 45s. My JS version took 0.3s
+        //        Revisit
+        //--------------------------------------------------
+        public static (int, string) P0010()
+        {
+            var result = Functions.Primes()
+                .TakeWhile(x => x <= 2000000)
+                .Sum(x => (long)x);
+
+            return (10, result.ToString());
         }
 
         private static void Assert(bool condition, string message)

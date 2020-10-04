@@ -9,7 +9,7 @@ namespace project_euler
             Console.WriteLine("Starting problem...");
             
             var start = DateTime.Now;
-            (var pNum, var answer) = Problem.P0009();
+            (var pNum, var answer) = Problem.P0010();
             var elapsed = DateTime.Now.Subtract(start);
 
             Console.WriteLine($@"Problem #{pNum} returned in {elapsed:hh\:mm\:ss\.FFFF} with: ""{answer}"".");

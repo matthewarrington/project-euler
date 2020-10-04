@@ -1,5 +1,6 @@
 namespace project_euler
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -16,39 +17,48 @@ namespace project_euler
             }
         }
 
+        // The version I wrote of this in JS runs in a fraction of the time
+        // in Chrome. Replacing "yield return" with a real collection makes
+        // up the difference. It generates primes under 2m in 0.8s, which
+        // seems fast enough for now.
+        // Chrome version does more work (possiblePrime++ instead of += 2),
+        // which leaves me pretty impressed with Chrome!
         public static IEnumerable<int> Primes()
         {
-            var i = 0;
-            foreach(var i2 in _primes)
-            {
-                yield return i2;
-                i = i2;
-            }
+            yield return 2;
+
+            var primes = new List<int>() { 2 };
+            var possiblePrime = 3;
 
             while(true)
             {
                 var isPrime = true;
-                foreach(var p in _primes)
+                var stopValue = Math.Sqrt(possiblePrime);
+                var primesLen = primes.Count;
+                for(int i = 0; i < primesLen; i++)
                 {
-                    if (i % p == 0)
+                    var knownPrime = primes[i];
+                    if (knownPrime > stopValue) {
+                        break;
+                    }
+                    else if (possiblePrime % knownPrime == 0)
                     {
                         isPrime = false;
-                        continue;
+                        break;
                     }
                 }
 
                 if (isPrime)
                 {
-                    _primes.Add(i);
-                    yield return i;
+                    primes.Add(possiblePrime);
+                    yield return possiblePrime;
                 }
 
-                i += 2;
+                possiblePrime += 2;
             }
         }
 
-        private static List<int> _primes = new List<int>() {2, 3};
-
+        // Returns: Keys = prime factor, Value = count of occurrences
         public static Dictionary<int, int> Factor(int i)
         {
             var result = new Dictionary<int, int>();
