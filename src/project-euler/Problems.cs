@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
 namespace project_euler
 {
-    internal static partial class Problem
+    /// <summary>
+    /// Note: These are not really tests. We're using the xUnit framework to execute
+    /// our puzzle problems, we're not writing "test code".
+    /// </summary>
+    public partial class Problem
     {
         //--------------------------------------------------
         // https://projecteuler.net/problem=1
@@ -13,17 +18,21 @@ namespace project_euler
         // we get 3, 5, 6 and 9. The sum of these multiples is 23.
         // Find the sum of all the multiples of 3 or 5 below 1000.
         //--------------------------------------------------
-        public static (int, string) P0001()
+        [Theory]
+        [InlineData(10, 23)]
+        [InlineData(1000, 233168)]
+        public void P0001(int limit, int expected)
         {
             var result = 0;
-            for(var i = 0; i < 1000; i++)
+            for (var i = 0; i < limit; i++)
             {
                 if (i % 3 == 0 || i % 5 == 0)
                 {
                     result += i;
                 }
             }
-            return (1, result.ToString());
+
+            Assert.Equal(expected, result);
         }
 
         //--------------------------------------------------
@@ -39,17 +48,17 @@ namespace project_euler
         //--------------------------------------------------
         // Notes:
         // I guess this would classically be a recursive function, but I want to write
-        // a sequence generator.       
+        // a sequence generator.
         //--------------------------------------------------
-        public static (int, string) P0002()
+        [Fact]
+        public void P0002()
         {
             var result = Functions.Fibonacci(1, 2)
                 .TakeWhile(x => x <= 4000000)
                 .Where(x => x % 2 == 0)
-                .Sum(x => x)
-                .ToString();
+                .Sum(x => x);
 
-            return (2, result);
+            Assert.Equal(4613732, result);
         }
 
         //--------------------------------------------------
@@ -67,23 +76,26 @@ namespace project_euler
         //  3. Repeat, stop when target is equal to the current prime?
         //     (Stop when target == 1, simpler loop logic)
         //--------------------------------------------------
-        public static (int, string) P0003()
+        [Theory]
+        [InlineData(13195, 29)]
+        [InlineData(600851475143, 6857)]
+        public void P0003(long input, long largestPrimeFactor)
         {
-            var target = 600851475143;
+            var result = -1;
 
-            foreach(var p in Functions.Primes().Take(1000))
+            foreach (var p in Functions.Primes().TakeWhile(x => x <= largestPrimeFactor))
             {
-                while (target % p == 0)
+                while (input % p == 0)
                 {
-                    target /= p;
+                    input /= p;
                 }
-                if (target == 1)
+                if (input == 1)
                 {
-                    return (3, p.ToString());
+                    result = p;
                 }
             }
 
-            throw new Exception("Ran out of primes without resolution.");
+            Assert.Equal(largestPrimeFactor, result);
         }
 
         //--------------------------------------------------
@@ -112,10 +124,15 @@ namespace project_euler
         //        * Victory: The product == pnum
         //        * Defeat: A or B is no longer 3 digits
         //  3. Try different pnums until we're out of 6-digit numbers
+        //
+        // TODO: Maybe redo this solution. It didn't translate well to
+        // a test.
         //--------------------------------------------------
-        public static (int, string) P0004()
+        [Fact]
+        public void P0004()
         {
-            foreach(var pNum in GeneratePalindromes())
+            var result = -1;
+            foreach (var pNum in GeneratePalindromes())
             {
                 var a = (int)Math.Sqrt(pNum);
                 var b = a;
@@ -126,7 +143,8 @@ namespace project_euler
 
                     if (product == pNum)
                     {
-                        return (4, product.ToString());
+                        result = product;
+                        break;
                     }
                     else if (product < pNum)
                     {
@@ -137,9 +155,14 @@ namespace project_euler
                         b--;
                     }
                 }
-            }
 
-            throw new Exception("Ran out of palindromes without resolution.");
+                if (result > 0)
+                {
+                    break;
+                }
+            }
+            // 2 digits: 9009
+            Assert.Equal(906609, result);
         }
 
         private static IEnumerable<int> GeneratePalindromes()
@@ -168,24 +191,27 @@ namespace project_euler
         //    is the product of the new set of factors.
         //    TODO: Come up with a better explanation. Factor factor factor.
         //--------------------------------------------------
-        public static (int, string) P0005()
+        [Theory]
+        [InlineData(10, 2520)]
+        [InlineData(20, 232792560)]
+        public void P0005(int input, long expected)
         {
             var factors = new Dictionary<int, int>();
-            for(int i = 20; i > 1; i--)
+            for (int i = input; i > 1; i--)
             {
-                factors.MergeFactors(Functions.Factor(i));
+                MergeFactors(factors, Functions.Factor(i));
             }
 
             var result = factors.Keys
                 .Aggregate(1, (product, factor) => product * (int)Math.Pow(factor, factors[factor])
                 );
 
-            return (5, result.ToString());
+            Assert.Equal(expected, result);
         }
 
-        private static void MergeFactors(this Dictionary<int, int> factors, Dictionary<int, int> newFactors)
+        private static void MergeFactors(Dictionary<int, int> factors, Dictionary<int, int> newFactors)
         {
-            foreach(var nk in newFactors.Keys)
+            foreach (var nk in newFactors.Keys)
             {
                 if (!factors.ContainsKey(nk) || factors[nk] < newFactors[nk])
                 {
@@ -216,13 +242,15 @@ namespace project_euler
         // Plan:
         //  * Brute force
         //--------------------------------------------------
-        public static (int, string) P0006()
+        [Theory]
+        [InlineData(10, 2640)]
+        [InlineData(100, 25164150)]
+        public void P0006(int max, int expected)
         {
-            var max = 100;
             var sumOfSquares = Enumerable.Range(1, max).Select(x => (int)Math.Pow(x, 2)).Sum();
             var squareOfSums = (int)Math.Pow(Enumerable.Range(1, max).Sum(), 2);
-
-            return (6, (squareOfSums - sumOfSquares).ToString());
+            var result = (squareOfSums - sumOfSquares);
+            Assert.Equal(expected, result);
         }
 
         //--------------------------------------------------
@@ -236,11 +264,13 @@ namespace project_euler
         // Plan:
         //  * Reuse existing function
         //--------------------------------------------------
-        public static (int, string) P0007()
+        [Theory]
+        [InlineData(6, 13)]
+        [InlineData(10001, 104743)]
+        public void P0007(int input, int expected)
         {
-            var result = Functions.Primes().Take(10001).Last();
-
-            return (7, result.ToString());
+            var result = Functions.Primes().Take(input).Last();
+            Assert.Equal(expected, result);
         }
 
         //--------------------------------------------------
@@ -281,15 +311,18 @@ namespace project_euler
         //    value makes for some gymnastics there. It's not slow to just
         //    recalculate the product.
         //--------------------------------------------------
-        public static (int, string) P0008()
+        [Theory]
+        [InlineData(4, 5832)]
+        [InlineData(13, 23514624000)]
+        public void P0008(int input, long expected)
         {
             var bigNumber = "7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450";
             var numbers = bigNumber.Select(x => (Int64)char.GetNumericValue(x)).ToList();
-            
-            var bufferSize = 13;
+
+            var bufferSize = input;
             var buffer = numbers.Take(bufferSize).ToList();
             var bestProduct = buffer.Aggregate(1L, (product, x) => product * x);
-            foreach(var n in numbers.Skip(bufferSize))
+            foreach (var n in numbers.Skip(bufferSize))
             {
                 buffer.RemoveAt(0);
                 buffer.Add(n);
@@ -301,9 +334,9 @@ namespace project_euler
                 }
             }
 
-            return (8, bestProduct.ToString());
+            Assert.Equal(expected, bestProduct);
         }
-        
+
         //--------------------------------------------------
         // https://projecteuler.net/problem=9
         //
@@ -358,12 +391,15 @@ namespace project_euler
         //      * We might be able to binary search rather than increment, but that's
         //        more complexity than we probably need.
         //--------------------------------------------------
-        public static (int, string) P0009()
+        [Theory]
+        [InlineData(1000, 31875000)]
+        public void P0009(int input, int expected)
         {
-            const int D = 1000;
+            int D = input;
             int A, B;
             int C = D - (D * 2 / 3) + 1;
             (A, B) = ResetAB(C, D);
+            var result = -1;
 
             do
             {
@@ -371,12 +407,13 @@ namespace project_euler
                 int SqC = Sq(C);
 
                 //Console.WriteLine($"{A}, {B}, {C}, {E}, {SqC}, {A*B*C}");
-                Assert((A + B + C) == D, "Violated A + B + C");
-                Assert(A < B && B < C, "Violated A < B < C");
+                Assert.True((A + B + C) == D, "Violated A + B + C");
+                Assert.True(A < B && B < C, "Violated A < B < C");
 
                 if (E == SqC)
                 {
-                    return (9, (A * B * C).ToString());
+                    result = A * B * C;
+                    break;
                 }
 
                 if (E < SqC)
@@ -391,20 +428,23 @@ namespace project_euler
                     (A, B) = ResetAB(C, D);
                 }
             }
-            while(C < A + B);
+            while (C < A + B);
 
-            throw new Exception("Failed without resolution");
+            Assert.Equal(expected, result);
 
-            (int A, int B) ResetAB(int C, int D) {
+            (int A, int B) ResetAB(int C, int D)
+            {
                 var A = (D - C) / 2;
                 var B = D - C - A;
-                if (A == B) {
+                if (A == B)
+                {
                     A--;
                     B++;
                 }
                 return (A, B);
             }
-            int Sq(int x) {
+            int Sq(int x)
+            {
                 return (int)Math.Pow(x, 2);
             }
         }
@@ -419,13 +459,16 @@ namespace project_euler
         // Plan:
         //  * Use the existing function
         //--------------------------------------------------
-        public static (int, string) P0010()
+        [Theory]
+        [InlineData(10, 17)]
+        [InlineData(2000000, 142913828922)]
+        public void P0010(long input, long expected)
         {
             var result = Functions.Primes()
-                .TakeWhile(x => x <= 2000000)
+                .TakeWhile(x => x <= input)
                 .Sum(x => (long)x);
 
-            return (10, result.ToString());
+            Assert.Equal(expected, result);
         }
 
         //--------------------------------------------------
@@ -465,7 +508,8 @@ namespace project_euler
         //    running east, south, southeast, southwest. In Chrome, this approach takes
         //    0.001s.
         //--------------------------------------------------
-        public static (int, string) P0011()
+        [Fact]
+        public void P0011()
         {
             int[,] grid = new int[,] {
                 {08, 02, 22, 97, 38, 15, 00, 40, 00, 75, 04, 05, 07, 78, 52, 12, 50, 77, 91, 08},
@@ -491,36 +535,29 @@ namespace project_euler
                 };
 
             var result = -1;
-            for(var i = 0; i < 20; i++)
-            for(var j = 0; j < 20; j++)
+            for (var i = 0; i < 20; i++)
+            for (var j = 0; j < 20; j++)
             {
                 if (i < 17)
                 {
-                    result = Math.Max(result, grid[i,j] * grid[i+1,j] * grid[i+2,j] * grid[i+3,j]);
+                    result = Math.Max(result, grid[i, j] * grid[i + 1, j] * grid[i + 2, j] * grid[i + 3, j]);
                 }
                 if (j < 17)
                 {
-                    result = Math.Max(result, grid[i,j] * grid[i,j+1] * grid[i,j+2] * grid[i,j+3]);
+                    result = Math.Max(result, grid[i, j] * grid[i, j + 1] * grid[i, j + 2] * grid[i, j + 3]);
 
                     if (i < 17)
                     {
-                        result = Math.Max(result, grid[i,j] * grid[i+1,j+1] * grid[i+2,j+2] * grid[i+3,j+3]);
+                        result = Math.Max(result, grid[i, j] * grid[i + 1, j + 1] * grid[i + 2, j + 2] * grid[i + 3, j + 3]);
                     }
                     if (i > 2)
                     {
-                        result = Math.Max(result, grid[i,j] * grid[i-1,j+1] * grid[i-2,j+2] * grid[i-3,j+3]);
+                        result = Math.Max(result, grid[i, j] * grid[i - 1, j + 1] * grid[i - 2, j + 2] * grid[i - 3, j + 3]);
                     }
                 }
             }
 
-            return (11, result.ToString());
-        }
-
-        private static void Assert(bool condition, string message)
-        {
-            if (!condition) {
-                throw new Exception(message);
-            }
+            Assert.Equal(70600674, result);
         }
     }
 }
