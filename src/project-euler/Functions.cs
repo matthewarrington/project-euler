@@ -80,6 +80,11 @@ namespace project_euler
  
         public static int ReverseInt(int i)
         {
+            if (i < 0)
+            {
+                return -1 * ReverseInt(-1 * i);
+            }
+
             var result = 0;
             while(i > 0)
             {
