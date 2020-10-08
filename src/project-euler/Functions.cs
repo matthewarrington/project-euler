@@ -1,9 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace project_euler
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     internal static class Functions
     {
         public static IEnumerable<int> Fibonacci(int a, int b)
@@ -27,7 +27,7 @@ namespace project_euler
         {
             yield return 2;
 
-            var primes = new List<int>() { 2 };
+            var primes = new List<int>() { 2 }; 
             var possiblePrime = 3;
 
             while(true)
