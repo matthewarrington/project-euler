@@ -27,18 +27,19 @@ namespace project_euler
         {
             yield return 2;
 
-            var primes = new List<int>() { 2 }; 
+            var primes = new List<int>() { 2 };
             var possiblePrime = 3;
 
-            while(true)
+            while (true)
             {
                 var isPrime = true;
                 var stopValue = Math.Sqrt(possiblePrime);
                 var primesLen = primes.Count;
-                for(int i = 0; i < primesLen; i++)
+                for (int i = 0; i < primesLen; i++)
                 {
                     var knownPrime = primes[i];
-                    if (knownPrime > stopValue) {
+                    if (knownPrime > stopValue)
+                    {
                         break;
                     }
                     else if (possiblePrime % knownPrime == 0)
@@ -62,7 +63,7 @@ namespace project_euler
         public static Dictionary<int, int> Factor(int i)
         {
             var result = new Dictionary<int, int>();
-            foreach(var p in Functions.Primes().TakeWhile(x => x <= i))
+            foreach (var p in Functions.Primes().TakeWhile(x => x <= i))
             {
                 if (i % p == 0)
                 {
@@ -77,7 +78,7 @@ namespace project_euler
             }
             return result;
         }
- 
+
         public static int ReverseInt(int i)
         {
             if (i < 0)
@@ -86,12 +87,38 @@ namespace project_euler
             }
 
             var result = 0;
-            while(i > 0)
+            while (i > 0)
             {
                 result = result * 10 + i % 10;
                 i /= 10;
             }
             return result;
+        }
+
+        public static IEnumerable<int> GeneratePalindromicIntegers(int numDigits)
+        {
+            Assure(numDigits % 2 == 0, "numDigits must be even");
+            Assure(numDigits >= 2, "numDigits must be between 2 and 8");
+            Assure(numDigits <= 8, "numDigits must be between 2 and 8");
+
+            var seed = ((int)Math.Pow(10, numDigits / 2)) - 1;
+            var term = ((int)Math.Pow(10, numDigits / 2 - 1));
+            var mult = ((int)Math.Pow(10, numDigits / 2));
+
+            while (seed >= term)
+            {
+                yield return seed * mult + Functions.ReverseInt(seed);
+                seed--;
+            }
+        }
+
+        // Naming this "Assure" since "Assert" is already heavily used by xUnit
+        private static void Assure(bool condition, string message)
+        {
+            if (!condition)
+            {
+                throw new Exception(message);
+            }
         }
     }
 }

@@ -124,20 +124,24 @@ namespace project_euler
         //        * Victory: The product == pnum
         //        * Defeat: A or B is no longer 3 digits
         //  3. Try different pnums until we're out of 6-digit numbers
-        //
-        // TODO: Maybe redo this solution. It didn't translate well to
-        // a test.
+        //  I believe this will be faster than brute forcing iteration of
+        //  the multiplicands.
         //--------------------------------------------------
-        [Fact]
-        public void P0004()
+        [Theory]
+        [InlineData(2, 9009)]
+        [InlineData(3, 906609)]
+        [InlineData(4, 99000099)]
+        public void P0004(int multiplicandSize, int largestPalindromicNumber)
         {
             var result = -1;
-            foreach (var pNum in GeneratePalindromes())
+            var multiplicandMin = ((int)Math.Pow(10, multiplicandSize - 1));
+            var multiplicandMax = ((int)Math.Pow(10, multiplicandSize)) - 1;
+            foreach (var pNum in Functions.GeneratePalindromicIntegers(multiplicandSize * 2))
             {
                 var a = (int)Math.Sqrt(pNum);
                 var b = a;
 
-                while (a <= 999 && b >= 100)
+                while (a <= multiplicandMax && b >= multiplicandMin)
                 {
                     var product = a * b;
 
@@ -161,19 +165,8 @@ namespace project_euler
                     break;
                 }
             }
-            // 2 digits: 9009
-            Assert.Equal(906609, result);
-        }
 
-        private static IEnumerable<int> GeneratePalindromes()
-        {
-            var seed = 999;
-
-            while (seed >= 100)
-            {
-                yield return seed * 1000 + Functions.ReverseInt(seed);
-                seed--;
-            }
+            Assert.Equal(largestPalindromicNumber, result);
         }
 
         //--------------------------------------------------
@@ -186,10 +179,10 @@ namespace project_euler
         // of the numbers from 1 to 20?
         //--------------------------------------------------
         // Plan:
-        //  * Find the set of factors for each input. Make a new set of factors,
-        //    composed of the highest count of each factor among the set. Result
-        //    is the product of the new set of factors.
-        //    TODO: Come up with a better explanation. Factor factor factor.
+        //  * To find the smallest product, we will want to look for overlap in
+        //    the prime factors of the multiplicands.
+        //  * Find the prime factors of numbers 1 .. n, and only use the factors
+        //    that have the highest count.
         //--------------------------------------------------
         [Theory]
         [InlineData(10, 2520)]
@@ -199,7 +192,7 @@ namespace project_euler
             var factors = new Dictionary<int, int>();
             for (int i = input; i > 1; i--)
             {
-                MergeFactors(factors, Functions.Factor(i));
+                P0005_MergeFactors(factors, Functions.Factor(i));
             }
 
             var result = factors.Keys
@@ -209,7 +202,10 @@ namespace project_euler
             Assert.Equal(expected, result);
         }
 
-        private static void MergeFactors(Dictionary<int, int> factors, Dictionary<int, int> newFactors)
+        // MergeFactors takes two set of prime factors - each with their cardinality -
+        // and returns one set of factors with the highest cardinality found in both
+        // sets.
+        private static void P0005_MergeFactors(Dictionary<int, int> factors, Dictionary<int, int> newFactors)
         {
             foreach (var nk in newFactors.Keys)
             {

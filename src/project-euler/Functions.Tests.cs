@@ -97,5 +97,28 @@ namespace project_euler
             var actual = Functions.ReverseInt(input);
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData(2, 100, "99,88,77,66,55,44,33,22,11")]
+        [InlineData(4, 11, "9999,9889,9779,9669,9559,9449,9339,9229,9119,9009,8998")]
+        [InlineData(8, 4, "99999999,99988999,99977999,99966999")]
+        public void GeneratePalindromicIntegers_ValidInput_ReturnsValues(int input, int numTerms, string expected)
+        {
+            var actualVals = Functions.GeneratePalindromicIntegers(input).Take(numTerms);
+            var actual = string.Join(',', actualVals.Select(x => x.ToString()));
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(-10)]
+        [InlineData(0)]
+        [InlineData(3)]
+        [InlineData(10)]
+        public void GeneratePalindromicIntegers_InvalidInput_TriggersWarnings(int input)
+        {
+            Assert.Throws<Exception>(() =>
+                Functions.GeneratePalindromicIntegers(input).Take(1).ToList()
+                );
+        }
     }
 }
