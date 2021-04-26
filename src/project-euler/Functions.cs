@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace project_euler
 {
-    internal static class Functions
+    public static class Functions
     {
         public static IEnumerable<int> Fibonacci(int a, int b)
         {
