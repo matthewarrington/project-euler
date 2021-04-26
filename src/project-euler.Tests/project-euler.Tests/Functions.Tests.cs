@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using project_euler;
 
-namespace project_euler
+namespace project_euler.Tests
 {
     public class FunctionsTests
     {
@@ -119,6 +121,69 @@ namespace project_euler
             Assert.Throws<Exception>(() =>
                 Functions.GeneratePalindromicIntegers(input).Take(1).ToList()
                 );
+        }
+
+        [Fact]
+        public void TriangleNumbers_FirstTen_ReturnsSequence()
+        {
+            var expected = new List<int>() { 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 };
+            var actual = Functions.TriangleNumbers().Take(10).ToList();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(5, 15)]
+        [InlineData(10, 55)]
+        [InlineData(35, 630)]
+        [InlineData(85, 3655)]
+        [InlineData(100, 5050)]
+        public void TriangleNumbers_GenerateXNumbers_ProducesNthNumber(int nthNumber, int expected)
+        {
+            var actual = Functions.TriangleNumbers().Skip(nthNumber - 1).First();
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void TriangleNumber_FirstTen_ReturnsSequence()
+        {
+            var expected = new List<long>() { 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 };
+            var actual = Enumerable.Range(1, 10).Select(x => Functions.TriangleNumber(x)).ToList();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(5, 15)]
+        [InlineData(10, 55)]
+        [InlineData(35, 630)]
+        [InlineData(85, 3655)]
+        [InlineData(100, 5050)]
+        public void TriangleNumber_GenerateXNumbers_ProducesNthNumber(int nthNumber, int expected)
+        {
+            var actual = Functions.TriangleNumber(nthNumber);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(1, 1, 1, 1, 1, 1)]
+        [InlineData(0, 123, 456, 789, 0, 999)]
+        [InlineData(-100, 5, -2, 1, 5, 2)]
+        public void Product_InputFiveValues_ReturnsProduct(long expected, long val1, long val2, long val3, long val4, long val5)
+        {
+            var actual = new[] { val1, val2, val3, val4, val5 }.Product();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(32, 1, 1, 1, 1, 1)]
+        [InlineData(4724200, 12, 45, 78, 0, 99)]
+        [InlineData(-216, 5, -2, 1, 5, 2)]
+        // TODO: Fix name, it sucks
+        public void Product_InputFiveValuesPlus1_ReturnsProduct(long expected, long val1, long val2, long val3, long val4, long val5)
+        {
+            var actual = new[] { val1, val2, val3, val4, val5 }.Product(x => x + 1);
+            Assert.Equal(expected, actual);
         }
     }
 }
