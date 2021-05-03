@@ -617,7 +617,7 @@ namespace project_euler
         public void P0013(int countNumbers, string expected)
         {
             var actual = new BigInteger(0);
-            foreach(var s in BigNumbers().Take(countNumbers))
+            foreach (var s in BigNumbers().Take(countNumbers))
             {
                 actual += BigInteger.Parse(s);
             }
@@ -730,6 +730,63 @@ namespace project_euler
                     "20849603980134001723930671666823555245252804609722",
                     "53503534226472524250874054075591789781264330331690"
                 };
+            }
+        }
+
+        //--------------------------------------------------
+        // https://projecteuler.net/problem=14
+        //
+        // The following iterative sequence is defined for the set of positive integers:
+        //
+        //      n → n/2 (n is even)
+        //      n → 3n + 1 (n is odd)
+        //
+        // Using the rule above and starting with 13, we generate the following sequence:
+        //
+        //      13 → 40 → 20 → 10 → 5 → 16 → 8 → 4 → 2 → 1
+        //
+        // It can be seen that this sequence (starting at 13 and finishing at 1) contains
+        // 10 terms. Although it has not been proved yet (Collatz Problem), it is thought
+        // that all starting numbers finish at 1.
+        //
+        // Which starting number, under one million, produces the longest chain?
+        // NOTE: Once the chain starts the terms are allowed to go above one million.
+        //--------------------------------------------------
+        [Theory]
+        [InlineData(1000000, 837799)]
+        public void P0014(int startingTermLimit, long expectedLongestChainHead)
+        {
+            var terms = Enumerable.Range(2, startingTermLimit - 1).Select(x => (long)x).ToList();
+
+            var maxChainLength = 1;
+            var maxTerm = 1L;
+
+            foreach (var t in terms)
+            {
+                var term = t;
+                int numTerms = 1;
+                while (term > 1)
+                {
+                    term = NextTerm(term);
+                    numTerms++;
+                }
+
+                if (maxChainLength < numTerms)
+                {
+                    maxChainLength = numTerms;
+                    maxTerm = t;
+                }
+            }
+
+            Assert.Equal(expectedLongestChainHead, maxTerm);
+
+            long NextTerm(long term)
+            {
+                if (term % 2 == 0)
+                {
+                    return term / 2;
+                }
+                return 3 * term + 1;
             }
         }
     }
