@@ -1,4 +1,3 @@
-using project_euler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -232,6 +231,23 @@ namespace project_euler.Tests
         {
             var actual = new[] { val1, val2, val3, val4, val5 }.Product(x => x + 1);
             Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(5L, 120L)]
+        [InlineData(4L, 24L)]
+        [InlineData(3L, 6L)]
+        [InlineData(2L, 2L)]
+        public void Factorial_PositiveInteger_ReturnsPositiveFactorial(long n, long expected)
+        {
+            var actual = Functions.Factorial(n);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Factorial_Zero_ThrowsInvalidArgument()
+        {
+            Assert.Throws<ArgumentException>(() => { Functions.Factorial(0); });
         }
     }
 }
