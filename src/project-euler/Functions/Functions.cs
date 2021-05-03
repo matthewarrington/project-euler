@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace project_euler
 {
@@ -193,6 +194,40 @@ namespace project_euler
             {
                 throw new Exception(message);
             }
+        }
+
+        public static long Factorial(long n)
+        {
+            if (n < 1L)
+            {
+                throw new ArgumentException();
+            }
+
+            var result = 1L;
+            while (n > 1)
+            {
+                result *= n;
+                n--;
+            }
+
+            return result;
+        }
+
+        public static BigInteger Factorial(BigInteger n)
+        {
+            if (n < 1)
+            {
+                throw new ArgumentException();
+            }
+
+            var result = new BigInteger(1);
+            while (n > 1)
+            {
+                result *= n;
+                n--;
+            }
+
+            return result;
         }
     }
 }

@@ -789,5 +789,45 @@ namespace project_euler
                 return 3 * term + 1;
             }
         }
+
+        //--------------------------------------------------
+        // https://projecteuler.net/problem=15
+        //
+        // Starting in the top left corner of a 2×2 grid, and only being able to
+        // move to the right and down, there are exactly 6 routes to the bottom
+        // right corner.
+        //
+        // How many such routes are there through a 20×20 grid?
+        //--------------------------------------------------
+        // The problem boils down to there being X right moves and Y down moves,
+        // and finding all permuataions of them. This is some kind of discrete
+        // maths problem - something I've long forgotten.
+        //
+        // The internet says this is simply "permutations with repetition", with
+        // a formula (in this case) of n! / n1! * n2!
+        // No program necessary to solve the problem, but the point is probably
+        // to make use of the BigInteger implemenation we were supposed to have
+        // made in Problem 13. (Or work the calculation to ensure it doesn't
+        // blow out a "long".
+        //
+        // Ref: https://www.emathematics.net/combinaprepeticion.php?a=7
+        //--------------------------------------------------
+        [Theory]
+        [InlineData(2L, 2L, 6L)]
+        [InlineData(20L, 20L, 137846528820L)]
+        public void P0015b(long gridXSize, long gridYSize, long expectedNumberOfPaths)
+        {
+            var n = new BigInteger(gridXSize + gridYSize);
+            var x = new BigInteger(gridXSize);
+            var y = new BigInteger(gridYSize);
+
+            var actualNumberOfPaths =
+                Functions.Factorial(n)
+                / Functions.Factorial(x)
+                / Functions.Factorial(y)
+                ;
+
+            Assert.Equal(expectedNumberOfPaths, actualNumberOfPaths);
+        }
     }
 }
