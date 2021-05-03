@@ -1,8 +1,8 @@
+using project_euler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using project_euler;
 
 namespace project_euler.Tests
 {
@@ -51,6 +51,23 @@ namespace project_euler.Tests
         public void Primes_GenerateNPrimes_ReturnsNthPrime(int nthPrime, int expected)
         {
             var actual = Functions.Primes().Skip(nthPrime - 1).First();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        // Expected values pulled from Le Internet
+        [InlineData(1, 2)]
+        [InlineData(2, 3)]
+        [InlineData(10, 29)]
+        [InlineData(100, 541)]
+        [InlineData(1000, 7919)]
+        [InlineData(10000, 104729)]
+        [InlineData(100000, 1299709)]
+        public void Primes_GenerateNPrimes_ReturnsNthPrime2(int nthPrime, int expected)
+        {
+            var sut = new PrimeNumberGenerator();
+
+            var actual = sut.Primes().Skip(nthPrime - 1).First();
             Assert.Equal(expected, actual);
         }
 
@@ -124,30 +141,9 @@ namespace project_euler.Tests
         }
 
         [Fact]
-        public void TriangleNumbers_FirstTen_ReturnsSequence()
-        {
-            var expected = new List<int>() { 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 };
-            var actual = Functions.TriangleNumbers().Take(10).ToList();
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(1, 1)]
-        [InlineData(5, 15)]
-        [InlineData(10, 55)]
-        [InlineData(35, 630)]
-        [InlineData(85, 3655)]
-        [InlineData(100, 5050)]
-        public void TriangleNumbers_GenerateXNumbers_ProducesNthNumber(int nthNumber, int expected)
-        {
-            var actual = Functions.TriangleNumbers().Skip(nthNumber - 1).First();
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
         public void TriangleNumber_FirstTen_ReturnsSequence()
         {
-            var expected = new List<long>() { 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 };
+            var expected = new List<int>() { 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 };
             var actual = Enumerable.Range(1, 10).Select(x => Functions.TriangleNumber(x)).ToList();
             Assert.Equal(expected, actual);
         }
@@ -159,10 +155,63 @@ namespace project_euler.Tests
         [InlineData(35, 630)]
         [InlineData(85, 3655)]
         [InlineData(100, 5050)]
-        public void TriangleNumber_GenerateXNumbers_ProducesNthNumber(int nthNumber, int expected)
+        public void TriangleNumber_GenerateNNumbers_ProducesNthNumber(int nthNumber, int expected)
         {
             var actual = Functions.TriangleNumber(nthNumber);
             Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(15, 5)]
+        [InlineData(55, 10)]
+        [InlineData(630, 35)]
+        [InlineData(3655, 85)]
+        [InlineData(5050, 100)]
+        public void TriangleTermNumber_TriangleNumber_ReturnsTermNumber(int number, int expected)
+        {
+            var actual = Functions.TriangleTermNumber(number);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(14)]
+        [InlineData(56)]
+        [InlineData(631)]
+        [InlineData(3658)]
+        [InlineData(5043)]
+        public void TriangleNumber_NotATriangleNumber_ReturnsZero(int number)
+        {
+            var expected = 0;
+            var actual = Functions.TriangleTermNumber(number);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(15)]
+        [InlineData(55)]
+        [InlineData(630)]
+        [InlineData(3655)]
+        [InlineData(5050)]
+        public void IsTriangleNumber_TriangleNumber_ReturnsTrue(int number)
+        {
+            var actual = Functions.IsTriangleNumber(number);
+            Assert.True(actual);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(14)]
+        [InlineData(56)]
+        [InlineData(631)]
+        [InlineData(3658)]
+        [InlineData(5043)]
+        public void IsTriangleNumber_NotATriangleNumber_ReturnsFalse(int number)
+        {
+            var actual = Functions.IsTriangleNumber(number);
+            Assert.False(actual);
         }
 
         [Theory]
@@ -179,7 +228,6 @@ namespace project_euler.Tests
         [InlineData(32, 1, 1, 1, 1, 1)]
         [InlineData(4724200, 12, 45, 78, 0, 99)]
         [InlineData(-216, 5, -2, 1, 5, 2)]
-        // TODO: Fix name, it sucks
         public void Product_InputFiveValuesPlus1_ReturnsProduct(long expected, long val1, long val2, long val3, long val4, long val5)
         {
             var actual = new[] { val1, val2, val3, val4, val5 }.Product(x => x + 1);
