@@ -143,7 +143,7 @@ namespace project_euler.Tests
         [Fact]
         public void TriangleNumber_FirstTen_ReturnsSequence()
         {
-            var expected = new List<long>() { 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 };
+            var expected = new List<int>() { 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 };
             var actual = Enumerable.Range(1, 10).Select(x => Functions.TriangleNumber(x)).ToList();
             Assert.Equal(expected, actual);
         }
@@ -228,7 +228,6 @@ namespace project_euler.Tests
         [InlineData(32, 1, 1, 1, 1, 1)]
         [InlineData(4724200, 12, 45, 78, 0, 99)]
         [InlineData(-216, 5, -2, 1, 5, 2)]
-        // TODO: Fix name, it sucks
         public void Product_InputFiveValuesPlus1_ReturnsProduct(long expected, long val1, long val2, long val3, long val4, long val5)
         {
             var actual = new[] { val1, val2, val3, val4, val5 }.Product(x => x + 1);

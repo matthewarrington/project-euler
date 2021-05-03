@@ -193,26 +193,24 @@ namespace project_euler
             var factors = new Dictionary<int, int>();
             for (int i = input; i > 1; i--)
             {
-                P0005_MergeFactors(factors, Functions.Factor(i));
+                MergeFactors(factors, Functions.Factor(i));
             }
 
-            var result = factors.Keys
-                .Aggregate(1, (product, factor) => product * (int)Math.Pow(factor, factors[factor])
-                );
+            var result = factors.Keys.Product(x => (int)Math.Pow(x, factors[x]));
 
             Assert.Equal(expected, result);
-        }
 
-        // MergeFactors takes two set of prime factors - each with their cardinality -
-        // and returns one set of factors with the highest cardinality found in both
-        // sets.
-        private static void P0005_MergeFactors(Dictionary<int, int> factors, Dictionary<int, int> newFactors)
-        {
-            foreach (var nk in newFactors.Keys)
+            // MergeFactors takes two set of prime factors - each with their cardinality -
+            // and returns one set of factors with the highest cardinality found in both
+            // sets.
+            void MergeFactors(Dictionary<int, int> factors, Dictionary<int, int> newFactors)
             {
-                if (!factors.ContainsKey(nk) || factors[nk] < newFactors[nk])
+                foreach (var nk in newFactors.Keys)
                 {
-                    factors[nk] = newFactors[nk];
+                    if (!factors.ContainsKey(nk) || factors[nk] < newFactors[nk])
+                    {
+                        factors[nk] = newFactors[nk];
+                    }
                 }
             }
         }
@@ -318,12 +316,12 @@ namespace project_euler
 
             var bufferSize = input;
             var buffer = numbers.Take(bufferSize).ToList();
-            var bestProduct = buffer.Aggregate(1L, (product, x) => product * x);
+            var bestProduct = buffer.Product();
             foreach (var n in numbers.Skip(bufferSize))
             {
                 buffer.RemoveAt(0);
                 buffer.Add(n);
-                var currentProduct = buffer.Aggregate(1L, (product, x) => product * x);
+                var currentProduct = buffer.Product();
                 //Console.WriteLine($"Current = {currentProduct}, vals = " + string.Join(',', buffer.Select(x => x.ToString())));
                 if (currentProduct > bestProduct)
                 {
@@ -533,26 +531,26 @@ namespace project_euler
 
             var result = -1;
             for (var i = 0; i < 20; i++)
-            for (var j = 0; j < 20; j++)
-            {
-                if (i < 17)
+                for (var j = 0; j < 20; j++)
                 {
-                    result = Math.Max(result, grid[i, j] * grid[i + 1, j] * grid[i + 2, j] * grid[i + 3, j]);
-                }
-                if (j < 17)
-                {
-                    result = Math.Max(result, grid[i, j] * grid[i, j + 1] * grid[i, j + 2] * grid[i, j + 3]);
-
                     if (i < 17)
                     {
-                        result = Math.Max(result, grid[i, j] * grid[i + 1, j + 1] * grid[i + 2, j + 2] * grid[i + 3, j + 3]);
+                        result = Math.Max(result, grid[i, j] * grid[i + 1, j] * grid[i + 2, j] * grid[i + 3, j]);
                     }
-                    if (i > 2)
+                    if (j < 17)
                     {
-                        result = Math.Max(result, grid[i, j] * grid[i - 1, j + 1] * grid[i - 2, j + 2] * grid[i - 3, j + 3]);
+                        result = Math.Max(result, grid[i, j] * grid[i, j + 1] * grid[i, j + 2] * grid[i, j + 3]);
+
+                        if (i < 17)
+                        {
+                            result = Math.Max(result, grid[i, j] * grid[i + 1, j + 1] * grid[i + 2, j + 2] * grid[i + 3, j + 3]);
+                        }
+                        if (i > 2)
+                        {
+                            result = Math.Max(result, grid[i, j] * grid[i - 1, j + 1] * grid[i - 2, j + 2] * grid[i - 3, j + 3]);
+                        }
                     }
                 }
-            }
 
             Assert.Equal(70600674, result);
         }

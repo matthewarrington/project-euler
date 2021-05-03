@@ -176,6 +176,16 @@ namespace project_euler
             return items.Aggregate(1, (product, x) => product * selector(x));
         }
 
+        public static long Product(this IEnumerable<long> items)
+        {
+            return items.Aggregate(1L, (product, x) => product * x);
+        }
+
+        public static long Product(this IEnumerable<long> items, Func<long, long> selector)
+        {
+            return items.Aggregate(1L, (product, x) => product * selector(x));
+        }
+
         // Naming this "Assure" since "Assert" is already heavily used by xUnit
         private static void Assure(bool condition, string message)
         {
