@@ -30,3 +30,8 @@ Also, I don't think my algorithm is likely the best. I tried some others but eve
 
 One thing I've learned from this - I seriously underestimated how difficult it would be to go from a "good basic" algorithm to a "top performing" algorithm. It wasn't worth the frustration to try to optimize now instead of revisiting it later.
 
+(Note: After recompiling the projects to 64-bit, the time dropped to 17.2m)
+
+## Problem 13
+
+Implement my own BigInteger class, instead of using .NET's
