@@ -55,6 +55,23 @@ namespace project_euler.Tests
         }
 
         [Theory]
+        // Expected values pulled from Le Internet
+        [InlineData(1, 2)]
+        [InlineData(2, 3)]
+        [InlineData(10, 29)]
+        [InlineData(100, 541)]
+        [InlineData(1000, 7919)]
+        [InlineData(10000, 104729)]
+        [InlineData(100000, 1299709)]
+        public void Primes_GenerateNPrimes_ReturnsNthPrime2(int nthPrime, int expected)
+        {
+            var sut = new PrimeNumberGenerator();
+
+            var actual = sut.Primes().Skip(nthPrime - 1).First();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
         [InlineData(2)]
         [InlineData(3)]
         [InlineData(43)]

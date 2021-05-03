@@ -21,8 +21,6 @@ namespace project_euler
         // in Chrome. Replacing "yield return" with a real collection makes
         // up the difference. It generates primes under 2m in 0.8s, which
         // seems fast enough for now.
-        // Chrome version does more work (possiblePrime++ instead of += 2),
-        // which leaves me pretty impressed with Chrome!
         public static IEnumerable<int> Primes()
         {
             yield return 2;
@@ -79,6 +77,32 @@ namespace project_euler
             return result;
         }
 
+        public static Dictionary<long, int> Factor(long i, PrimeNumberGenerator primes)
+        {
+            var result = new Dictionary<long, int>();
+            var primesList = primes.Primes().TakeWhile(x => x <= i).ToList();
+            var primesCount = primesList.Count();
+            long p = 0;
+            for (int j = 0; j < primesCount; j++)
+            {
+                p = primesList[j];
+                if (i % p == 0)
+                {
+                    result[p] = 0;
+                    var i2 = i;
+                    while (i2 % p == 0)
+                    {
+                        result[p]++;
+                        i2 /= p;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static int NumDivisors(long i, PrimeNumberGenerator primes)
+            => Factor(i, primes).Values.Product(x => x + 1);
+
         public static int ReverseInt(int i)
         {
             if (i < 0)
@@ -119,14 +143,12 @@ namespace project_euler
         //
         // Triangle numbers don't need to be enumerated. They can be computed.
         //--------------------------------------------------
-        public static long TriangleNumber(int termNumber)
-        {
-            return (termNumber + 1) * termNumber / 2;
-        }
+        public static int TriangleNumber(int termNumber)
+            => (termNumber + 1) * termNumber / 2;
 
         public static int TriangleTermNumber(int number)
         {
-            int guess = (int)Math.Sqrt(number * 2);
+            var guess = (int)Math.Sqrt(number * 2);
 
             if (number == TriangleNumber(guess))
             {
@@ -147,8 +169,11 @@ namespace project_euler
         }
 
         public static bool IsTriangleNumber(int number)
+            => TriangleTermNumber(number) > 0;
+
+        public static int Product(this IEnumerable<int> items, Func<int, int> selector)
         {
-            return TriangleTermNumber(number) > 0;
+            return items.Aggregate(1, (product, x) => product * selector(x));
         }
 
         // Naming this "Assure" since "Assert" is already heavily used by xUnit
