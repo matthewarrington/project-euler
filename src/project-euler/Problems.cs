@@ -815,19 +815,57 @@ namespace project_euler
         [Theory]
         [InlineData(2L, 2L, 6L)]
         [InlineData(20L, 20L, 137846528820L)]
-        public void P0015b(long gridXSize, long gridYSize, long expectedNumberOfPaths)
+        public void P0015(long gridXSize, long gridYSize, long expectedNumberOfPaths)
         {
-            var n = new BigInteger(gridXSize + gridYSize);
-            var x = new BigInteger(gridXSize);
-            var y = new BigInteger(gridYSize);
+            checked
+            {
+                var n = new BigInteger(gridXSize + gridYSize);
+                var x = new BigInteger(gridXSize);
+                var y = new BigInteger(gridYSize);
 
-            var actualNumberOfPaths =
-                Functions.Factorial(n)
-                / Functions.Factorial(x)
-                / Functions.Factorial(y)
-                ;
+                var actualNumberOfPaths =
+                    Functions.Factorial(n)
+                    / Functions.Factorial(x)
+                    / Functions.Factorial(y)
+                    ;
 
-            Assert.Equal(expectedNumberOfPaths, actualNumberOfPaths);
+                Assert.Equal(expectedNumberOfPaths, actualNumberOfPaths);
+            }
+        }
+
+        //--------------------------------------------------
+        // https://projecteuler.net/problem=16
+        //
+        // 2^15 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.
+        //
+        // What is the sum of the digits of the number 2^1000?
+        //
+        //--------------------------------------------------
+        // The problem boils down to there being X right moves and Y down moves,
+        // and finding all permuataions of them. This is some kind of discrete
+        // maths problem - something I've long forgotten.
+        //
+        // The internet says this is simply "permutations with repetition", with
+        // a formula (in this case) of n! / n1! * n2!
+        // No program necessary to solve the problem, but the point is probably
+        // to make use of the BigInteger implemenation we were supposed to have
+        // made in Problem 13. (Or work the calculation to ensure it doesn't
+        // blow out a "long".
+        //
+        // Ref: https://www.emathematics.net/combinaprepeticion.php?a=7
+        //--------------------------------------------------
+        [Theory]
+        [InlineData(15, 26)]
+        [InlineData(1000, 1366)]
+        public void P0016(int power, int expectedSum)
+        {
+            checked
+            {
+                var value = BigInteger.Pow(2, power);
+                var actualSum = Functions.ToDigits(value).Sum();
+
+                Assert.Equal(expectedSum, actualSum);
+            }
         }
     }
 }
