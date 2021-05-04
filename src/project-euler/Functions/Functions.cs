@@ -104,6 +104,29 @@ namespace project_euler
         public static int NumDivisors(long i, PrimeNumberGenerator primes)
             => Factor(i, primes).Values.Product(x => x + 1);
 
+        public static IEnumerable<int> ToDigits(int i)
+        {
+            var reverseDigits = new List<int>();
+            while (i > 0)
+            {
+                reverseDigits.Add(i % 10);
+                i /= 10;
+            }
+            return reverseDigits.Reverse<int>();
+        }
+
+        public static IEnumerable<int> ToDigits(BigInteger i)
+        {
+            var reverseDigits = new List<int>();
+            while (i > 0)
+            {
+                var d = i % 10;
+                reverseDigits.Add((int)d);
+                i /= 10;
+            }
+            return reverseDigits.Reverse<int>();
+        }
+
         public static int ReverseInt(int i)
         {
             if (i < 0)

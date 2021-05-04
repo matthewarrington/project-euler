@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Xunit;
 
 namespace project_euler.Tests
@@ -84,6 +85,27 @@ namespace project_euler.Tests
             Assert.Single(actual.Keys);
             Assert.True(actual?.ContainsKey(input));
             Assert.Equal(1, actual[input]);
+        }
+
+        [Theory]
+        [InlineData(5, new int[] { 5 })]
+        [InlineData(23, new int[] { 2, 3 })]
+        [InlineData(123456, new int[] { 1, 2, 3, 4, 5, 6 })]
+        public void ToDigits_PositiveInteger_ReturnsDigits(int input, int[] expected)
+        {
+            var actual = Functions.ToDigits(input).ToArray();
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(5, new int[] { 5 })]
+        [InlineData(23, new int[] { 2, 3 })]
+        [InlineData(1234567890123456789L, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 })]
+        public void ToDigits_PositiveBigInteger_ReturnsDigits(long input, int[] expected)
+        {
+            var i = new BigInteger(input);
+            var actual = Functions.ToDigits(i).ToArray();
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
